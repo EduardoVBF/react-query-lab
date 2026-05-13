@@ -4,6 +4,7 @@ import {
   deletePost,
   updatePost,
 } from "@/services/api/posts.service";
+import { PostDetailsModal } from "@/components/posts/post-details-modal";
 import { PostsPageLayout } from "@/components/posts/posts-page-layout";
 import { PostsPagination } from "@/components/posts/posts-pagination";
 import { PostFormModal } from "@/components/posts/post-form-modal";
@@ -30,9 +31,12 @@ export default function TraditionalPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
-  const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const [detailsPostId, setDetailsPostId] = useState<number | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const debouncedSearch = useDebounce(search, 500);
 
@@ -152,7 +156,10 @@ export default function TraditionalPage() {
         {!isLoading && !isError && posts.length > 0 && (
           <PostsGrid
             posts={posts}
-            onView={() => {}}
+            onView={(post) => {
+              setDetailsPostId(post.id);
+              setIsDetailsOpen(true);
+            }}
             onEdit={(post) => {
               setSelectedPost(post);
               setIsFormOpen(true);
@@ -175,6 +182,11 @@ export default function TraditionalPage() {
         isPending={isSubmitting}
         onOpenChange={setIsFormOpen}
         onSubmit={handleSubmitPost}
+      />
+      <PostDetailsModal
+        open={isDetailsOpen}
+        postId={detailsPostId}
+        onOpenChange={setIsDetailsOpen}
       />
     </AppShell>
   );

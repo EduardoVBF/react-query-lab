@@ -1,3 +1,4 @@
+import { Comment } from "@/types/comment";
 import { Post } from "@/types/post";
 import { api } from "./client";
 
@@ -77,4 +78,16 @@ export async function deletePost(id: number): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   await api.delete(`/posts/${id}`);
+}
+
+export async function getPostComments(
+  postId: number,
+): Promise<Comment[]> {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  const response = await api.get<Comment[]>(
+    `/posts/${postId}/comments`,
+  );
+
+  return response.data;
 }
