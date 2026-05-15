@@ -1,5 +1,7 @@
+import { PostsResponse } from "@/types/posts-response";
 import { Comment } from "@/types/comment";
 import { Post } from "@/types/post";
+
 import { api } from "./client";
 
 interface GetPostsParams {
@@ -8,17 +10,11 @@ interface GetPostsParams {
   search?: string;
 }
 
-interface GetPostsResponse {
-  posts: Post[];
-  total: number;
-  totalPages: number;
-}
-
 export async function getPosts({
   page,
   limit,
   search,
-}: GetPostsParams): Promise<GetPostsResponse> {
+}: GetPostsParams): Promise<PostsResponse> {
   await new Promise((resolve) => setTimeout(resolve, 1200));
 
   const response = await api.get<Post[]>("/posts");
